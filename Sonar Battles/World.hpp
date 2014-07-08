@@ -1,7 +1,7 @@
 #pragma once
 //#include <SFML\Graphics.hpp>
-#include "ResourceHolder.h"
-#include "ResourceIdentifiers.h"
+#include "ResourceHolder.hpp"
+#include "ResourceIdentifiers.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/Graphics/View.hpp>

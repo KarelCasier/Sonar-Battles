@@ -1,8 +1,8 @@
 #pragma once
 
-#include "State.h"
+#include "State.hpp"
 #include "StateIdentifiers.hpp"
-#include "ResourceIdentifiers.h"
+#include "ResourceIdentifiers.hpp"
 
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>

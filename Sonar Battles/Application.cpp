@@ -1,12 +1,12 @@
-#include "Application.h"
+#include "Application.hpp"
 
 //#include "Utility.hpp"
-#include "State.h"
+#include "State.hpp"
 #include "StateIdentifiers.hpp"
-// #include "TitleState.h"
-#include "GameState.h"
-// #include "MenuState.h"
-// #include "PauseState.h"
+// #include "TitleState.hpp"
+#include "GameState.hpp"
+// #include "MenuState.hpp"
+// #include "PauseState.hpp"
 
 const sf::Time Application::TimePerFrame = sf::seconds(1.f / 60.f); // = 0.6 seconds per frame, therefore 60fps
 
@@ -65,12 +65,6 @@ void Application::processEvents()
 
 		if (event.type == sf::Event::Closed)
 			mWindow.close();
-
-		if (event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::Key::Escape)
-				mWindow.close();
-		}
 	}
 }
 

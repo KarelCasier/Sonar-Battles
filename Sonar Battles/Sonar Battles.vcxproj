@@ -168,13 +168,13 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="Category.h" />
+    <ClInclude Include="Application.hpp" />
+    <ClInclude Include="Category.hpp" />
     <ClInclude Include="GameObject.hpp" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="ResourceHolder.h" />
-    <ClInclude Include="ResourceIdentifiers.h" />
-    <ClInclude Include="State.h" />
+    <ClInclude Include="GameState.hpp" />
+    <ClInclude Include="ResourceHolder.hpp" />
+    <ClInclude Include="ResourceIdentifiers.hpp" />
+    <ClInclude Include="State.hpp" />
     <ClInclude Include="StateIdentifiers.hpp" />
     <ClInclude Include="StateStack.hpp" />
     <ClInclude Include="Submarine.hpp" />

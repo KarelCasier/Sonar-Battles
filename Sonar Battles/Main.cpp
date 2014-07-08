@@ -7,7 +7,7 @@
 #pragma comment(lib, "gdi32.lib")  
 #endif // SFML_STATIC
 
-#include "Application.h"
+#include "Application.hpp"
 #include <stdexcept>
 #include <iostream>
 

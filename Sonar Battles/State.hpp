@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StateIdentifiers.hpp"
-#include "ResourceIdentifiers.h"
+#include "ResourceIdentifiers.hpp"
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>

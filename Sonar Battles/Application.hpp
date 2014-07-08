@@ -4,8 +4,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-#include "ResourceHolder.h"
-#include "ResourceIdentifiers.h"
+#include "ResourceHolder.hpp"
+#include "ResourceIdentifiers.hpp"
 #include "StateStack.hpp"
 
 #include <sstream>

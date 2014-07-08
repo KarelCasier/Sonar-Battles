@@ -3,8 +3,8 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 
-#include "ResourceHolder.h"
-#include "ResourceIdentifiers.h"
+#include "ResourceHolder.hpp"
+#include "ResourceIdentifiers.hpp"
 
 class Submarine : public GameObject
 {
