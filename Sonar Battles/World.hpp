@@ -9,7 +9,8 @@
 #include <SFML/System/Time.hpp>
 
 #include <array>
-#include <queue>
+
+#include "TileMap.hpp"
 
 // Forward declaration
 namespace sf
@@ -33,9 +34,19 @@ private:
 private:
 	enum Layer
 	{
-		Floor,
 		Main,
 		LayerCount
+	};
+
+	enum TileState
+	{
+		BLANK,		// 0
+		TOPLEFT,	// 1
+		TOPRIGHT,	// 2
+		BOTTOMRIGHT,// 3
+		BOTTOMLEFT, // 4
+		HORIZONTAL,	// 5
+		VERTICAL,	// 6
 	};
 
 private:
@@ -43,4 +54,5 @@ private:
 	sf::View							mWorldView;
 	TextureHolder						mTextures;
 
+	TileMap								mTileMap;
 };

@@ -15,7 +15,7 @@ public:
 	void load(Identifier id, const std::string& filename, const Parameter& secondParam); //Overloaded function for resource types that need multiple parameteres: Music, Shader... etc 
 
 	Resource& get(Identifier id);
-	const Resource& get(Identifier id) const;  //Overloaded function if acessing from a const ResourceHolder
+	const Resource& get(Identifier id) const;  //Overloaded function if accessing from a const ResourceHolder
 
 
 private:

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "State.h"
-#include "World.h"
+#include "World.hpp"
 
 class GameState : public State
 {

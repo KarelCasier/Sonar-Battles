@@ -12,10 +12,10 @@ enum class TextureID
 	TitleScreen,
 
 	//Tiles
-	Ground,
+	TileMap,
 
-	//Mech
-	PlayerMech,
+	//Submarine
+	Submarine,
 };
 
 enum class FontID
