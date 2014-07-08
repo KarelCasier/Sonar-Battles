@@ -9,8 +9,11 @@
 #include <SFML/System/Time.hpp>
 
 #include <array>
+#include <memory>
 
 #include "TileMap.hpp"
+#include "GameObject.hpp"
+#include "Submarine.hpp"
 
 // Forward declaration
 namespace sf
@@ -18,9 +21,10 @@ namespace sf
 	class RenderWindow;
 }
 
-class World
-	: private sf::NonCopyable
+class World : private sf::NonCopyable
 {
+	typedef std::unique_ptr<GameObject> Ptr;
+
 public:
 	explicit		World(sf::RenderWindow& window);
 	void			update(sf::Time dt);
@@ -55,4 +59,10 @@ private:
 	TextureHolder						mTextures;
 
 	TileMap								mTileMap;
+
+	std::vector<sf::Vector2f>			mSpawnLocations;
+
+	std::vector<Ptr>					mGameObjects;
+
+	Submarine*							mPlayerSub;
 };

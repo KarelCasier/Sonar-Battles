@@ -34,6 +34,11 @@ void World::draw()
 {
 	mWindow.setView(mWorldView);
 	mWindow.draw(mTileMap);
+	for (const Ptr& object : mGameObjects)
+	{
+		mWindow.draw(*object);
+	}
+	
 
 }
 
@@ -50,6 +55,8 @@ void World::loadTextures()
 
 void World::buildScene()
 {
+
+	// Build Level
 	std::array<unsigned int, 1800> mTileStateArray =
 	{ {
 
@@ -86,5 +93,14 @@ void World::buildScene()
 
 	} };
 
-	mTileMap.load(mTextures.get(TextureID::TileMap), 20, mTileStateArray, 60, 30);
+	mTileMap.load<1800>(mTextures.get(TextureID::TileMap), 20, mTileStateArray, 60, 30);
+
+	mSpawnLocations.push_back(sf::Vector2f(100.f, 260.f));
+
+	// Build Subs
+	std::unique_ptr<Submarine> playerSub(new Submarine(mTextures));
+	mPlayerSub = playerSub.get();
+	mPlayerSub->setPosition(mSpawnLocations.back());
+	mSpawnLocations.pop_back();
+	mGameObjects.push_back(std::move(playerSub));
 }
