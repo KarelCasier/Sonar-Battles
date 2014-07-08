@@ -37,7 +37,7 @@ public:
 				// Get pointer to current tile's quad
 				sf::Vertex* quad = &mVertices[(i + j * mGridSize.x) * 4];
 
-				// Define its 4 corners
+				// Define its 4 corners - Has to be listed either clockwise or counter-clockwise
 				quad[0].position = sf::Vector2f(i * mTileSize, j * mTileSize);			//	Top Left
 				quad[1].position = sf::Vector2f((i + 1) * mTileSize, j * mTileSize);			//	Top Right
 				quad[2].position = sf::Vector2f((i + 1) * mTileSize, (j + 1) * mTileSize);		//	Bottom Right
@@ -52,6 +52,11 @@ public:
 		}
 
 		return true;
+	}
+
+	sf::Vector2f getCenter() const
+	{
+		return sf::Vector2f(mGridSize.x * mTileSize / 2, mGridSize.y * mTileSize / 2);
 	}
 
 private:
@@ -70,6 +75,6 @@ private:
 	sf::Texture							mTileSet;
 	sf::VertexArray						mVertices;
 	sf::Vector2u						mGridSize;
-	int								mTileSize;
+	int									mTileSize;
 
 };

@@ -18,7 +18,7 @@ World::World(sf::RenderWindow& window)
 
 	// Prepare the view
 	// Move view to center over vertices
-	//mWorldView.setCenter(sf::Vector2f(mGridSize.x * mTileSize / 2, mGridSize.y * mTileSize / 2));
+	mWorldView.setCenter(mTileMap.getCenter());
 }
 
 void World::update(sf::Time dt)
@@ -42,6 +42,9 @@ void World::loadTextures()
 {
 	// Tile map
 	mTextures.load(TextureID::TileMap, "assets/MapTileSet.png");
+
+	//Submarine
+	mTextures.load(TextureID::Submarine, "assets/Submarine.png");
 
 }
 
