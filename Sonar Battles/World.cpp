@@ -38,8 +38,90 @@ void World::update(sf::Time dt)
 	sf::Vector2f subPos = mPlayerSub->getPosition();
 	sf::Vector2u subTilePos(floor(subPos.x / mTileMap.getTileSize()), floor(subPos.y / mTileMap.getTileSize()));
 	
-	int tileNumber = subTilePos.x + subTilePos.y * subTilePos.x;
-	std::cout << "Tile collision: " << tileNumber << std::endl;
+	// Get tile that sub is on
+	int tileNumber = subTilePos.x + subTilePos.y * mTileMap.getGridSize().x;
+	//std::cout << "Tile collision: " << tileNumber << std::endl;
+
+	//Create line object for that tile
+	sf::Vector2f ptA, ptB;
+	line.setSize(sf::Vector2f(2, mTileMap.getTileSize()));
+	line.setFillColor(sf::Color::Red);
+
+	if (tileNumber > 0 && tileNumber <= (mTileMap.getGridSize().x * mTileMap.getGridSize().y))
+	{
+		//std::cout << mTileStateArray[tileNumber] << std::endl;
+		switch (mTileStateArray[tileNumber])
+		{
+		case 1:
+			// Horizontal - Check
+			ptA.x = subTilePos.x * mTileMap.getTileSize();
+			ptA.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+
+			ptB.x = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
+			ptB.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+
+			line.setRotation(-90);
+			break;
+		case 2:
+			// Top Left - Check
+			ptA.x = subTilePos.x * mTileMap.getTileSize();
+			ptA.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+
+			ptB.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+			ptB.y = subTilePos.y * mTileMap.getTileSize();
+
+			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
+			line.setRotation(-135);
+			break;
+		case 3:
+			// Top Right - Check
+			ptA.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+			ptA.y = subTilePos.y * mTileMap.getTileSize();
+
+			ptB.x = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
+			ptB.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+
+			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
+			line.setRotation(-45);
+			break;
+		case 4:
+			// Bottom Right - Check
+			ptA.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+			ptA.y = subTilePos.y * mTileMap.getTileSize() + mTileMap.getTileSize();
+
+			ptB.x = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
+			ptB.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+
+			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
+			line.setRotation(-135);
+			break;
+		case 5:
+			// Bottom Left - Check
+			ptA.x = subTilePos.x * mTileMap.getTileSize();
+			ptA.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+
+			ptB.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+			ptB.y = subTilePos.y * mTileMap.getTileSize() + mTileMap.getTileSize();
+
+			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
+			line.setRotation(-45);
+			break;
+		case 6:
+			//Vertical - Check
+			ptA.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+			ptA.y = subTilePos.y * mTileMap.getTileSize();
+
+			ptB.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
+			ptB.y = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
+
+			line.setRotation(0);
+			break;
+		default:
+			break;
+		}
+		line.setPosition(ptA);
+	}
+
 	//std::cout << "( " <<  << ", " <<  << ")" << std::endl;
 
 	// Apply movements
@@ -58,6 +140,7 @@ void World::draw()
 		mWindow.draw(*object);
 	}
 	
+	mWindow.draw(line);
 
 }
 
@@ -76,7 +159,7 @@ void World::buildScene()
 {
 
 	// Build Level - ToDo - Allow import from files
-	std::array<unsigned int, 1800> mTileStateArray =
+	mTileStateArray =
 	{ {
 
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

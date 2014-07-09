@@ -16,6 +16,9 @@
 #include "GameObject.hpp"
 #include "Submarine.hpp"
 
+
+#include <SFML/Graphics/RectangleShape.hpp>
+
 // Forward declaration
 namespace sf
 {
@@ -63,10 +66,13 @@ private:
 	CommandQueue						mCommandQueue;
 
 	TileMap								mTileMap;
+	std::array<unsigned int, 1800>		mTileStateArray;
 
 	std::vector<sf::Vector2f>			mSpawnLocations;
 
 	std::vector<Ptr>					mGameObjects;
 
 	Submarine*							mPlayerSub;
+
+	sf::RectangleShape line;
 };
