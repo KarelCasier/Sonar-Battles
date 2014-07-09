@@ -158,9 +158,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="Submarine.cpp" />
@@ -170,8 +172,10 @@
   <ItemGroup>
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="Category.hpp" />
+    <ClInclude Include="CommandQueue.hpp" />
     <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="GameState.hpp" />
+    <ClInclude Include="PauseState.hpp" />
     <ClInclude Include="ResourceHolder.hpp" />
     <ClInclude Include="ResourceIdentifiers.hpp" />
     <ClInclude Include="State.hpp" />

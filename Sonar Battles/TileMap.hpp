@@ -48,9 +48,9 @@ public:
 				quad[1].texCoords = sf::Vector2f((tu + 1) * mTileSize, tv * mTileSize);
 				quad[2].texCoords = sf::Vector2f((tu + 1) * mTileSize, (tv + 1) * mTileSize);
 				quad[3].texCoords = sf::Vector2f(tu * mTileSize, (tv + 1) * mTileSize);
+
 			}
 		}
-
 		return true;
 	}
 
@@ -58,6 +58,9 @@ public:
 	{
 		return sf::Vector2f(mGridSize.x * mTileSize / 2, mGridSize.y * mTileSize / 2);
 	}
+
+	int getTileSize() const { return mTileSize; }
+	sf::Vector2u getGridSize() const { return mGridSize; }
 
 private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const

@@ -1,7 +1,7 @@
 #include "World.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+
 #include <algorithm>
 #include <cmath>
 
@@ -23,11 +23,30 @@ World::World(sf::RenderWindow& window)
 
 void World::update(sf::Time dt)
 {
-	//Center view on player
-	//mWorldView.setCenter(mPlayerMech->getWorldPosition());
+	//Handle player commands
+	while (!mCommandQueue.isEmpty())
+	{
+		Command command = mCommandQueue.pop();
+		for (const Ptr& object : mGameObjects)
+		{
+			object->onCommand(command, dt);
+		}
+
+	}
+
+	//Collision
+	sf::Vector2f subPos = mPlayerSub->getPosition();
+	sf::Vector2u subTilePos(floor(subPos.x / mTileMap.getTileSize()), floor(subPos.y / mTileMap.getTileSize()));
+	
+	int tileNumber = subTilePos.x + subTilePos.y * subTilePos.x;
+	std::cout << "Tile collision: " << tileNumber << std::endl;
+	//std::cout << "( " <<  << ", " <<  << ")" << std::endl;
 
 	// Apply movements
-	//mSceneGraph.update(dt);
+	for (const Ptr& object : mGameObjects)
+	{
+		object->update(dt);
+	}
 }
 
 void World::draw()
@@ -56,7 +75,7 @@ void World::loadTextures()
 void World::buildScene()
 {
 
-	// Build Level
+	// Build Level - ToDo - Allow import from files
 	std::array<unsigned int, 1800> mTileStateArray =
 	{ {
 
@@ -95,12 +114,17 @@ void World::buildScene()
 
 	mTileMap.load<1800>(mTextures.get(TextureID::TileMap), 20, mTileStateArray, 60, 30);
 
-	mSpawnLocations.push_back(sf::Vector2f(100.f, 260.f));
+	mSpawnLocations.push_back(sf::Vector2f(100.f, 300.f));
 
 	// Build Subs
-	std::unique_ptr<Submarine> playerSub(new Submarine(mTextures));
+	std::unique_ptr<Submarine> playerSub(new Submarine(mTextures, Submarine::TypeID::Player));
 	mPlayerSub = playerSub.get();
 	mPlayerSub->setPosition(mSpawnLocations.back());
 	mSpawnLocations.pop_back();
 	mGameObjects.push_back(std::move(playerSub));
+}
+
+CommandQueue& World::getCommandQueue()
+{
+	return mCommandQueue;
 }

@@ -11,6 +11,7 @@
 #include <array>
 #include <memory>
 
+#include "CommandQueue.hpp"
 #include "TileMap.hpp"
 #include "GameObject.hpp"
 #include "Submarine.hpp"
@@ -30,6 +31,7 @@ public:
 	void			update(sf::Time dt);
 	void			draw();
 
+	CommandQueue&	getCommandQueue();
 
 private:
 	void			loadTextures();
@@ -57,6 +59,8 @@ private:
 	sf::RenderWindow&					mWindow;
 	sf::View							mWorldView;
 	TextureHolder						mTextures;
+
+	CommandQueue						mCommandQueue;
 
 	TileMap								mTileMap;
 
