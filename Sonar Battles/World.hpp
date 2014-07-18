@@ -40,6 +40,8 @@ private:
 	void			loadTextures();
 	void			buildScene();
 
+	void			createTileGeometry(sf::Vector2f pos, sf::Vector2f& ptA, sf::Vector2f& ptB, int tileNumber);
+
 private:
 	enum Layer
 	{
@@ -73,6 +75,4 @@ private:
 	std::vector<Ptr>					mGameObjects;
 
 	Submarine*							mPlayerSub;
-
-	sf::RectangleShape line;
 };

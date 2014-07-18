@@ -7,6 +7,43 @@
 
 #include "iostream"
 
+bool get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y,
+	float p2_x, float p2_y, float p3_x, float p3_y, float *i_x, float *i_y)
+{
+	float s02_x, s02_y, s10_x, s10_y, s32_x, s32_y, s_numer, t_numer, denom, t;
+	s10_x = p1_x - p0_x;
+	s10_y = p1_y - p0_y;
+	s32_x = p3_x - p2_x;
+	s32_y = p3_y - p2_y;
+
+	denom = s10_x * s32_y - s32_x * s10_y;
+	if (denom == 0)
+		return false; // Collinear
+	bool denomPositive = denom > 0;
+
+	s02_x = p0_x - p2_x;
+	s02_y = p0_y - p2_y;
+	s_numer = s10_x * s02_y - s10_y * s02_x;
+	if ((s_numer < 0) == denomPositive)
+		return false; // No collision
+
+	t_numer = s32_x * s02_y - s32_y * s02_x;
+	if ((t_numer < 0) == denomPositive)
+		return false; // No collision
+
+	if (((s_numer > denom) == denomPositive) || ((t_numer > denom) == denomPositive))
+		return false; // No collision
+	// Collision detected
+	t = t_numer / denom;
+	if (i_x != NULL)
+		*i_x = p0_x + (t * s10_x);
+	if (i_y != NULL)
+		*i_y = p0_y + (t * s10_y);
+
+	return true;
+}
+
+
 World::World(sf::RenderWindow& window)
 : mWindow(window)
 , mWorldView(window.getDefaultView())
@@ -23,6 +60,8 @@ World::World(sf::RenderWindow& window)
 
 void World::update(sf::Time dt)
 {
+	sf::Vector2f playerPosBefore = mPlayerSub->getPosition();
+
 	//Handle player commands
 	while (!mCommandQueue.isEmpty())
 	{
@@ -34,6 +73,14 @@ void World::update(sf::Time dt)
 
 	}
 
+	// Apply movements
+	for (const Ptr& object : mGameObjects)
+	{
+		object->update(dt);
+	}
+
+	sf::Vector2f playerPosAfter = mPlayerSub->getPosition();
+
 	//Collision
 	sf::Vector2f subPos = mPlayerSub->getPosition();
 	sf::Vector2u subTilePos(floor(subPos.x / mTileMap.getTileSize()), floor(subPos.y / mTileMap.getTileSize()));
@@ -44,8 +91,6 @@ void World::update(sf::Time dt)
 
 	//Create line object for that tile
 	sf::Vector2f ptA, ptB;
-	line.setSize(sf::Vector2f(2, mTileMap.getTileSize()));
-	line.setFillColor(sf::Color::Red);
 
 	if (tileNumber > 0 && tileNumber <= (mTileMap.getGridSize().x * mTileMap.getGridSize().y))
 	{
@@ -59,8 +104,6 @@ void World::update(sf::Time dt)
 
 			ptB.x = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
 			ptB.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
-
-			line.setRotation(-90);
 			break;
 		case 2:
 			// Top Left - Check
@@ -69,9 +112,6 @@ void World::update(sf::Time dt)
 
 			ptB.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
 			ptB.y = subTilePos.y * mTileMap.getTileSize();
-
-			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
-			line.setRotation(-135);
 			break;
 		case 3:
 			// Top Right - Check
@@ -80,9 +120,6 @@ void World::update(sf::Time dt)
 
 			ptB.x = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
 			ptB.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
-
-			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
-			line.setRotation(-45);
 			break;
 		case 4:
 			// Bottom Right - Check
@@ -91,9 +128,6 @@ void World::update(sf::Time dt)
 
 			ptB.x = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
 			ptB.y = subTilePos.y * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
-
-			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
-			line.setRotation(-135);
 			break;
 		case 5:
 			// Bottom Left - Check
@@ -102,9 +136,6 @@ void World::update(sf::Time dt)
 
 			ptB.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
 			ptB.y = subTilePos.y * mTileMap.getTileSize() + mTileMap.getTileSize();
-
-			line.setSize(sf::Vector2f(2, mTileMap.getTileSize() / 1.5));
-			line.setRotation(-45);
 			break;
 		case 6:
 			//Vertical - Check
@@ -112,23 +143,23 @@ void World::update(sf::Time dt)
 			ptA.y = subTilePos.y * mTileMap.getTileSize();
 
 			ptB.x = subTilePos.x * mTileMap.getTileSize() + (mTileMap.getTileSize() / 2);
-			ptB.y = subTilePos.x * mTileMap.getTileSize() + mTileMap.getTileSize();
-
-			line.setRotation(0);
+			ptB.y = subTilePos.y * mTileMap.getTileSize() + mTileMap.getTileSize();
 			break;
 		default:
 			break;
 		}
-		line.setPosition(ptA);
+	}
+
+	sf::Vector2f newPosition;
+	//Get current movement vector
+	if (get_line_intersection(ptA.x, ptA.y, ptB.x, ptB.y, playerPosBefore.x, playerPosBefore.y, playerPosAfter.x, playerPosAfter.y, &newPosition.x, &newPosition.y))
+	{
+		std::cout << "Collision" << std::endl;
+		mPlayerSub->setPosition(newPosition);
+		mPlayerSub->setVelocity(0, 0);
 	}
 
 	//std::cout << "( " <<  << ", " <<  << ")" << std::endl;
-
-	// Apply movements
-	for (const Ptr& object : mGameObjects)
-	{
-		object->update(dt);
-	}
 }
 
 void World::draw()
@@ -139,8 +170,6 @@ void World::draw()
 	{
 		mWindow.draw(*object);
 	}
-	
-	mWindow.draw(line);
 
 }
 
