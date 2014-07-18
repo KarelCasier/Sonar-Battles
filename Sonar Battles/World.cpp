@@ -49,6 +49,7 @@ World::World(sf::RenderWindow& window)
 , mWorldView(window.getDefaultView())
 , mTextures()
 //, mTileStateArray()
+, mTimeSinceLastBounce(sf::Time::Zero)
 {
 	loadTextures();
 	buildScene();
@@ -151,12 +152,52 @@ void World::update(sf::Time dt)
 	}
 
 	sf::Vector2f newPosition;
-	//Get current movement vector
-	if (get_line_intersection(ptA.x, ptA.y, ptB.x, ptB.y, playerPosBefore.x, playerPosBefore.y, playerPosAfter.x, playerPosAfter.y, &newPosition.x, &newPosition.y))
+	mTimeSinceLastBounce += dt;
+	if (mTimeSinceLastBounce.asMilliseconds() >= 50) // Workaround for double collision detection
 	{
-		std::cout << "Collision" << std::endl;
-		mPlayerSub->setPosition(newPosition);
-		mPlayerSub->setVelocity(0, 0);
+		if (get_line_intersection(ptA.x, ptA.y, ptB.x, ptB.y, playerPosBefore.x, playerPosBefore.y, playerPosAfter.x, playerPosAfter.y, &newPosition.x, &newPosition.y))
+		{
+			std::cout << "Collision" << std::endl;
+			mPlayerSub->setPosition(newPosition);
+			//mPlayerSub->setVelocity(0, 0);
+			//std::cout << "Current Velocity: ( " << mPlayerSub->getVelocity().x << ", " << mPlayerSub->getVelocity().y << ")" << std::endl;
+			switch (mTileStateArray[tileNumber])
+			{
+			case 1:
+				// Horizontal
+				//Flip y
+				mPlayerSub->setVelocity(mPlayerSub->getVelocity().x, -mPlayerSub->getVelocity().y);
+				break;
+			case 2:
+				// Top Left
+				// Switch and flip x and y
+				mPlayerSub->setVelocity(-mPlayerSub->getVelocity().y, -mPlayerSub->getVelocity().x);
+				break;
+			case 3:
+				// Top Right
+				// Switch x and y
+				mPlayerSub->setVelocity(mPlayerSub->getVelocity().y, mPlayerSub->getVelocity().x);
+				break;
+			case 4:
+				// Bottom Right
+				// Switch and flip x and y
+				mPlayerSub->setVelocity(-mPlayerSub->getVelocity().y, -mPlayerSub->getVelocity().x);
+				break;
+			case 5:
+				// Bottom Left
+				// Switch x and y
+				mPlayerSub->setVelocity(mPlayerSub->getVelocity().y, mPlayerSub->getVelocity().x);
+				break;
+			case 6:
+				//Vertical
+				//Flip x
+				mPlayerSub->setVelocity(-mPlayerSub->getVelocity().x, mPlayerSub->getVelocity().y);
+			default:
+				break;
+			}
+			// Restart bounce timer
+			mTimeSinceLastBounce = sf::Time::Zero;
+		}
 	}
 
 	//std::cout << "( " <<  << ", " <<  << ")" << std::endl;

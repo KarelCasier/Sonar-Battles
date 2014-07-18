@@ -75,4 +75,6 @@ private:
 	std::vector<Ptr>					mGameObjects;
 
 	Submarine*							mPlayerSub;
+
+	sf::Time							mTimeSinceLastBounce;
 };
